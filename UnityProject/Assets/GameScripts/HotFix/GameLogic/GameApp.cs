@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using GameBase;
+using GameLogic;
 using TEngine;
 
 /// <summary>
@@ -37,7 +39,20 @@ public partial class GameApp:Singleton<GameApp>
     /// </summary>
     private void StartGameLogic()
     {
-        
+        // 在这里，.Forget() 是一个用于处理异步任务的特殊方法，通常用于忽略异步任务的结果或异常情况。
+        // 在C#中使用UniTask库时，.Forget() 方法可以在不需要等待异步任务完成或者不需要处理其结果时使用。
+        // 具体来说，.Forget() 方法用于“忘记”这个异步操作，不捕获它的结果，也不捕获它可能抛出的异常。这通常在以下几种情况下有用：
+        // 1,Fire-and-Forget：当你启动一个异步操作但不需要等待它完成或者不关心它的结果时使用。
+        // 2,避免编译器警告：如果你启动一个异步任务但没有等待它，编译器可能会给出警告，提醒你未处理任务的结果。使用.Forget()可以消除这些警告。
+        StartBattleRoom().Forget();
+    }
+
+    private async UniTaskVoid StartBattleRoom()
+    {
+        // .ToUniTask() 是一种方法，将其他异步类型转换为 UniTask 类型。
+        // UniTask 是一个高性能的 C# 异步库，它是 UniRx 的一部分，通常用于 Unity 游戏开发中以替代原生的 Task 和 Coroutine。
+        await GameModule.Scene.LoadScene("scene_battle").ToUniTask();
+        BattleSystem.Instance.LoadRoom().Forget();
     }
 
     /// <summary>
