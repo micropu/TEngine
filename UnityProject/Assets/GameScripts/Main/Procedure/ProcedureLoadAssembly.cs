@@ -183,13 +183,32 @@ namespace GameMain
 
             try
             {
-                var assembly = Assembly.Load(textAsset.bytes);
-                if (string.Compare(SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName, assetName, StringComparison.Ordinal) == 0)
+                // 旧代码
+                //var assembly = Assembly.Load(textAsset.bytes);
+                //if (string.Compare(SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName, assetName, StringComparison.Ordinal) == 0)
+                //{
+                //    m_MainLogicAssembly = assembly;
+                //}
+                //m_HotfixAssemblys.Add(assembly);
+                //Log.Debug($"Assembly [ {assembly.GetName().Name} ] loaded");
+
+                // 修改方案
+                // 确认textAsset.bytes 的长度或内容,有内容再加载，也可以直接报错
+                if (textAsset.bytes.Length > 0)
                 {
-                    m_MainLogicAssembly = assembly;
+                    var assembly = Assembly.Load(textAsset.bytes);
+                    if (string.Compare(SettingsUtils.HybridCLRCustomGlobalSettings.LogicMainDllName, assetName, StringComparison.Ordinal) == 0)
+                    {
+                        m_MainLogicAssembly = assembly;
+                    }
+                    m_HotfixAssemblys.Add(assembly);
+
+                    // Fix:Assembly 未加载完全: 在某些情况下，即使使用 Assembly.Load(byte[]) 加载了程序集，
+                    // 也可能无法直接访问其属性或方法，直到该程序集被完全加载和初始化。
+                    // 这导致 assembly.GetName() 报错,改用 FullName 属性
+                    Log.Debug($"Assembly [ {assembly.FullName} ] loaded");
                 }
-                m_HotfixAssemblys.Add(assembly);
-                Log.Debug($"Assembly [ {assembly.GetName().Name} ] loaded");
+
             }
             catch (Exception e)
             {
