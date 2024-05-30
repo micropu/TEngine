@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace TEngine.Editor
             }
 
             BuildTarget target = GetBuildTarget(platform);
-            
+
             BuildDLLCommand.BuildAndCopyDlls(target);
         }
 
@@ -56,7 +56,7 @@ namespace TEngine.Editor
             BuildInternal(target, outputRoot);
             Debug.LogWarning($"Start BuildPackage BuildTarget:{target} outputPath:{outputRoot}");
         }
-        
+
         [MenuItem("TEngine/Quick Build/一键打包AssetBundle")]
         public static void BuildCurrentPlatformAB()
         {
@@ -109,29 +109,29 @@ namespace TEngine.Editor
 
             IBuildPipeline pipeline = null;
             BuildParameters buildParameters = null;
-            
+
             if (buildPipeline == EBuildPipeline.BuiltinBuildPipeline)
             {
                 // 构建参数
                 BuiltinBuildParameters builtinBuildParameters = new BuiltinBuildParameters();
-                
+
                 // 执行构建
                 pipeline = new BuiltinBuildPipeline();
                 buildParameters = builtinBuildParameters;
-                
+
                 builtinBuildParameters.CompressOption = ECompressOption.LZ4;
             }
             else
             {
                 ScriptableBuildParameters scriptableBuildParameters = new ScriptableBuildParameters();
-                
+
                 // 执行构建
                 pipeline = new ScriptableBuildPipeline();
                 buildParameters = scriptableBuildParameters;
-                
+
                 scriptableBuildParameters.CompressOption = ECompressOption.LZ4;
             }
-            
+
             buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
             buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
             buildParameters.BuildPipeline = buildPipeline.ToString();
@@ -140,13 +140,13 @@ namespace TEngine.Editor
             buildParameters.PackageName = "DefaultPackage";
             buildParameters.PackageVersion = packageVersion;
             buildParameters.VerifyBuildingResult = true;
-            buildParameters.FileNameStyle =  EFileNameStyle.BundleName_HashName;
+            buildParameters.FileNameStyle = EFileNameStyle.BundleName_HashName;
             buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.ClearAndCopyAll;
             buildParameters.BuildinFileCopyParams = string.Empty;
-            buildParameters.EncryptionServices = CreateEncryptionInstance("DefaultPackage",buildPipeline);
+            buildParameters.EncryptionServices = CreateEncryptionInstance("DefaultPackage", buildPipeline);
             // 启用共享资源打包
             buildParameters.EnableSharePackRule = true;
-            
+
             var buildResult = pipeline.Run(buildParameters, true);
             if (buildResult.Success)
             {
@@ -156,9 +156,91 @@ namespace TEngine.Editor
             {
                 Debug.LogError($"构建失败 : {buildResult.ErrorInfo}");
             }
-            
+
         }
-        
+
+        public static void BuildTest()
+        {
+            Debug.Log($"开始构建 : {BuildTarget.StandaloneWindows64}");
+
+
+            IBuildPipeline pipeline = null;
+            BuildParameters buildParameters = null;
+
+            ScriptableBuildParameters scriptableBuildParameters = new ScriptableBuildParameters();
+
+            // 执行构建
+            pipeline = new ScriptableBuildPipeline();
+            buildParameters = scriptableBuildParameters;
+
+            scriptableBuildParameters.CompressOption = ECompressOption.LZ4;
+
+            buildParameters.BuildOutputRoot = Application.dataPath + "/../Bundles/Windows";
+            buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
+            buildParameters.BuildPipeline = EBuildPipeline.ScriptableBuildPipeline.ToString();
+            buildParameters.BuildTarget = BuildTarget.StandaloneWindows64;
+            buildParameters.BuildMode = EBuildMode.IncrementalBuild;
+            buildParameters.PackageName = "DefaultPackage";
+            buildParameters.PackageVersion = "1.0";
+            buildParameters.VerifyBuildingResult = true;
+            
+            buildParameters.FileNameStyle = EFileNameStyle.BundleName_HashName;
+            buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.ClearAndCopyByTags;
+            buildParameters.BuildinFileCopyParams = "Launch";
+            buildParameters.EncryptionServices = CreateEncryptionInstance("DefaultPackage", EBuildPipeline.ScriptableBuildPipeline);
+            // 启用共享资源打包
+            buildParameters.EnableSharePackRule = true;
+
+            var buildResult = pipeline.Run(buildParameters, true);
+            if (buildResult.Success)
+            {
+                var bundlePath = Application.dataPath + "/../Bundles/Windows/StandaloneWindows64/DefaultPackage/1.0/";
+                var targetPath = System.IO.Path.Combine(Application.dataPath, "../../Tools/FileServer/",SettingsUtils.GlobalSettings.FrameworkGlobalSettings.ResourcesArea.ResAdminType+"_"+SettingsUtils.GlobalSettings.FrameworkGlobalSettings.ResourcesArea.ResAdminCode,SettingsUtils.GetPlatformName());
+                DeleteFilesInDirectory(targetPath);
+                CopyFiles(bundlePath, targetPath);
+                Debug.Log($"构建成功 : {buildResult.OutputPackageDirectory}");
+            }
+            else
+            {
+                Debug.LogError($"构建失败 : {buildResult.ErrorInfo}");
+            }
+
+        }
+        static void CopyFiles(string sourceDirectory, string destinationDirectory)
+        {
+            // 确保目标目录存在
+            if (!Directory.Exists(destinationDirectory))
+            {
+                Directory.CreateDirectory(destinationDirectory);
+            }
+
+            // 获取源目录下的所有文件
+            string[] files = Directory.GetFiles(sourceDirectory);
+
+            foreach (string filePath in files)
+            {
+                // 构建目标文件路径
+                string fileName = Path.GetFileName(filePath);
+                string destinationFilePath = Path.Combine(destinationDirectory, fileName);
+
+                // 拷贝文件
+                File.Copy(filePath, destinationFilePath, true); // 如果目标文件已存在，覆盖
+            }
+        }
+
+        static void DeleteFilesInDirectory(string directoryPath)
+        {
+            if(!Directory.Exists(directoryPath)) return;
+            // 获取目录下的所有文件
+            string[] files = Directory.GetFiles(directoryPath);
+
+            foreach (string filePath in files)
+            {
+                // 删除文件
+                File.Delete(filePath);
+            }
+        }
+
         /// <summary>
         /// 创建加密类实例
         /// </summary>
@@ -219,6 +301,8 @@ namespace TEngine.Editor
             BuildImp(BuildTargetGroup.iOS, BuildTarget.iOS, $"{Application.dataPath}/../Build/IOS/XCode_Project");
         }
 
+
+
         public static void BuildImp(BuildTargetGroup buildTargetGroup, BuildTarget buildTarget, string locationPathName)
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(buildTargetGroup, BuildTarget.StandaloneWindows64);
@@ -226,7 +310,7 @@ namespace TEngine.Editor
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray(),
+                scenes = new[] { "Assets/Scenes/main.unity" },
                 locationPathName = locationPathName,
                 targetGroup = buildTargetGroup,
                 target = buildTarget,

@@ -17,13 +17,12 @@ namespace GameLogic
         public async UniTaskVoid LoadRoom()
         {
             _startWaitTimer = 1f; // 重置等待时间
-
-            await UniTask.Yield();
+            await UniTask.Yield(); // 等待一帧
             //// 创建房间根对象
             //_roomRoot = new GameObject("BattleRoom");
 
-            //// 加载背景音乐
-            //GameModule.Audio.Play(AudioType.Music, "music_background", true);
+            // 加载背景音乐
+            GameModule.Audio.Play(AudioType.Music, "music_background", true);
 
             //// 创建玩家实体对象
             //var handle = PoolManager.Instance.GetGameObject("player_ship", parent: _roomRoot.transform);
