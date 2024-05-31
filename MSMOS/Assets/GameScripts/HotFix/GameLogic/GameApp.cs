@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using GameBase;
+using GameLogic;
 using TEngine;
 
 /// <summary>
@@ -37,7 +39,14 @@ public partial class GameApp:Singleton<GameApp>
     /// </summary>
     private void StartGameLogic()
     {
-        
+        StartBattleRoom().Forget();
+    }
+
+    private async UniTaskVoid StartBattleRoom()
+    {
+        Log.Warning("======= Start MainScene =======");
+        await GameModule.Scene.LoadScene("MainScene").ToUniTask();
+        MainSceneSystem.Instance.LoadRoom().Forget();
     }
 
     /// <summary>
