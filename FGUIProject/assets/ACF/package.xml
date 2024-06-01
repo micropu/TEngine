@@ -2,6 +2,7 @@
 <packageDescription id="0gy53f7n">
   <resources>
     <component id="xjt20" name="Login.xml" path="/" exported="true"/>
+    <component id="bt872" name="LoginButton.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

@@ -226,6 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1092901326}
   - component: {fileID: 1092901325}
+  - component: {fileID: 1092901327}
   m_Layer: 5
   m_Name: UIPanel
   m_TagString: Untagged
@@ -257,7 +258,7 @@ MonoBehaviour:
   rotation: {x: 0, y: 0, z: 0}
   fairyBatching: 0
   touchDisabled: 0
-  cachedUISize: {x: 800, y: 600}
+  cachedUISize: {x: 1024, y: 768}
   hitTestMode: 0
   setNativeChildrenOrder: 0
 --- !u!4 &1092901326
@@ -270,11 +271,23 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01831502, y: 0.01831502, z: 0.01831502}
+  m_LocalScale: {x: 0.018867925, y: 0.018867925, z: 0.018867925}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1092901327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092901324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ead3e7728ae1de84cadf447a86599663, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1537059542
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,7 +379,7 @@ Transform:
   m_GameObject: {fileID: 1537059542}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.78022, y: -5, z: 0}
+  m_LocalPosition: {x: 11.443397, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -24,7 +24,7 @@ namespace GameMain
 
         private async UniTaskVoid UpdateManifest(ProcedureOwner procedureOwner)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(5.5f));
             
             var operation = GameModule.Resource.UpdatePackageManifestAsync(GameModule.Resource.PackageVersion);
             

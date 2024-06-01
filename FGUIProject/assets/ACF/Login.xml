@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="800,600">
+<component size="1024,768">
   <displayList>
-    <text id="n0_lzud" name="n0" xy="39,40" size="314,86" fontSize="30" autoSize="none" text="林至实验室2222222222222222"/>
+    <text id="n0_lzud" name="n0" xy="330,91" size="314,43" fontSize="30" align="center" autoSize="none" text="林至实验室"/>
+    <graph id="n8_bt87" name="n8" xy="318,169" size="354,66" type="rect" lineSize="2" fillColor="#00ff0000"/>
+    <text id="n1_bt87" name="account" xy="322,177" size="345,52" fontSize="30" autoSize="none" text="" input="true"/>
+    <graph id="n9_bt87" name="n9" xy="318,273" size="354,66" type="rect" lineSize="2" fillColor="#00ff0000"/>
+    <text id="n2_bt87" name="password" xy="322,278" size="346,58" fontSize="30" autoSize="none" text="" input="true"/>
+    <component id="n3_bt87" name="login" src="bt872" fileName="LoginButton.xml" xy="314,367" size="360,65"/>
+    <text id="n4_bt87" name="n4" xy="461,378" size="64,42" fontSize="30" text="登录"/>
+    <text id="n5_bt87" name="n5" xy="217,183" size="64,42" fontSize="30" text="账号"/>
+    <text id="n6_bt87" name="n6" xy="220,289" size="64,42" fontSize="30" text="密码"/>
   </displayList>
 </component>
