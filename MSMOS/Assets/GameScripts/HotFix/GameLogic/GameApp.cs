@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using GameBase;
 using GameLogic;
 using TEngine;
+using FairyGUI;
 
 /// <summary>
 /// 游戏App。
@@ -44,7 +45,6 @@ public partial class GameApp:Singleton<GameApp>
 
     private async UniTaskVoid StartBattleRoom()
     {
-        Log.Warning("======= Start MainScene =======");
         await GameModule.Scene.LoadScene("MainScene").ToUniTask();
         MainSceneSystem.Instance.LoadRoom().Forget();
     }

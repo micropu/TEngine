@@ -33,6 +33,7 @@ MonoBehaviour:
   - YooAsset.dll
   - UniTask.dll
   - TEngine.Runtime.dll
+  - FairyGUI.dll
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
